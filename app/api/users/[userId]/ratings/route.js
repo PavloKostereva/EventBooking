@@ -4,14 +4,14 @@ export async function GET(request, { params }) {
   try {
     const { userId } = await params;
 
-    let supabaseAdmin;
-    try {
-      const { supabaseAdmin: admin } = await import('../../../../../lib/supabase-server');
-      supabaseAdmin = admin;
-    } catch (importError) {
-      console.warn('Failed to import supabaseAdmin:', importError.message);
+    const { supabaseAdmin } = await import('../../../../../lib/supabase-server');
+
+    if (!supabaseAdmin) {
       return NextResponse.json(
-        { success: false, message: 'Server configuration error' },
+        {
+          success: false,
+          message: 'Server configuration error. Please configure SUPABASE_SERVICE_ROLE_KEY.',
+        },
         { status: 503 },
       );
     }

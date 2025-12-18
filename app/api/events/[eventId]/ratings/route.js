@@ -4,13 +4,11 @@ export async function GET(request, { params }) {
   try {
     const { eventId } = await params;
 
-    // Динамічний імпорт, щоб не падати, якщо ключ не встановлений
-    let supabaseAdmin;
-    try {
-      const { supabaseAdmin: admin } = await import('../../../../../lib/supabase-server');
-      supabaseAdmin = admin;
-    } catch (importError) {
-      console.warn('Failed to import supabaseAdmin, returning empty ratings:', importError.message);
+    // Імпортуємо supabaseAdmin
+    const { supabaseAdmin } = await import('../../../../../lib/supabase-server');
+
+    if (!supabaseAdmin) {
+      console.warn('Supabase admin client not configured, returning empty ratings');
       return NextResponse.json({
         success: true,
         averageRating: '0.0',
