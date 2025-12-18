@@ -4,6 +4,8 @@ import PastEvents from './components/Home/PastEvents';
 import Features from './components/Home/Features';
 import './styles/home.css';
 
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   return (
     <>

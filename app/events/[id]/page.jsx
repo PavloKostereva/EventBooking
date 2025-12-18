@@ -1,5 +1,8 @@
 'use client';
 import { useParams, useRouter } from 'next/navigation';
+
+// Force dynamic rendering on Vercel
+export const dynamic = 'force-dynamic';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
 import StarRating from '../../components/Event/StarRating';
