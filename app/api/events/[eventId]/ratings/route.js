@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request, { params }) {
   try {
-    const { eventId } = params;
+    const { eventId } = await params;
 
     // Динамічний імпорт, щоб не падати, якщо ключ не встановлений
     let supabaseAdmin;

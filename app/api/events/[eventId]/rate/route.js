@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request, { params }) {
   try {
-    const { eventId } = params;
+    const { eventId } = await params;
     
     let supabaseAdmin;
     try {
