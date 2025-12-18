@@ -1,0 +1,187 @@
+/* src/pages/EventDetailsPage.css */
+
+/* Контейнер, який ставить кнопку і контент поруч */
+.details-wrapper {
+    display: flex;
+    gap: 40px; /* Відступ між кнопкою і карткою */
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start; /* Щоб кнопка "прилипла" до верху */
+  }
+  
+  /* --- Кнопка НАЗАД --- */
+  .details-sidebar {
+    flex: 0 0 auto; /* Не розтягується */
+  }
+  
+  .back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 2px solid #007bff; /* Синя рамка */
+    color: #007bff;
+    padding: 10px 20px;
+    border-radius: 50px; /* Овальна форма */
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+  }
+  
+  .back-btn:hover {
+    background-color: #007bff;
+    color: white;
+    transform: translateX(-5px); /* Легкий рух вліво при наведенні */
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* --- Основний контент --- */
+  .details-main {
+    flex: 1; /* Займає весь доступний простір справа */
+    width: 100%;
+  }
+  
+  /* Картка події */
+  .event-details-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    border: 1px solid #eaeaea;
+  }
+  
+  /* Темна тема для картки */
+  .dark-event {
+    background: #2a2a2a;
+    color: #fff;
+    border: 1px solid #444;
+  }
+  
+  .event-details-card h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+  }
+  
+  .dark-event h1 {
+    border-bottom: 2px solid #444;
+  }
+  
+  /* Сітка з інформацією (Дата, Місце і т.д.) */
+  .event-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+    background: rgba(0,0,0,0.03); /* Легкий сірий фон */
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .dark-event .event-info-grid {
+    background: rgba(255,255,255,0.05); /* Легкий прозорий фон для темної теми */
+  }
+  
+  .event-description h3 {
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .dark-event .event-description h3 {
+    color: #bbb;
+  }
+  
+  .event-description p {
+    line-height: 1.6;
+    font-size: 1.1rem;
+  }
+  
+  /* --- Секція відгуків --- */
+  .reviews-section h3 {
+      margin-bottom: 20px;
+  }
+  
+  .review-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 4px solid #ddd; /* Сіра смужка зліва */
+  }
+  
+  .review-item.dark-review {
+    background: #333;
+    border-left: 4px solid #555;
+    color: #eee;
+  }
+  
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .review-stars {
+    color: gold;
+  }
+  
+  .review-text {
+      font-style: italic;
+      color: #555;
+  }
+  
+  .dark-review .review-text {
+      color: #ccc;
+  }
+  
+  /* Мобільна адаптація */
+  @media (max-width: 768px) {
+    .details-wrapper {
+      flex-direction: column;
+      padding: 20px;
+      gap: 20px;
+    }
+    
+    .details-sidebar, .back-btn {
+      width: 100%;
+    }
+  }
+
+  /* ... ваші попередні стилі ... */
+
+/* Стилі для зображення */
+.event-image-container {
+    width: 100%;
+    height: 350px; /* Фіксована висота для гарного вигляду */
+    overflow: hidden;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.event-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Це обріже картинку, щоб вона заповнила блок, не спотворюючись */
+    object-position: center;
+    transition: transform 0.5s ease;
+}
+
+/* Ефект збільшення при наведенні (за бажанням) */
+.event-image:hover {
+    transform: scale(1.05);
+}
+
+/* Мобільна адаптація */
+@media (max-width: 768px) {
+    .event-image-container {
+        height: 200px; /* Менша висота на телефонах */
+    }
+}
