@@ -17,16 +17,26 @@ const EventList = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        console.log('Початок завантаження подій з Supabase...');
         const { data, error } = await supabase.from('events').select('*');
 
         if (error) {
           console.error('Помилка при завантаженні подій:', error);
-          throw error;
+          console.error('Помилка деталі:', {
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+          });
+          setEvents([]);
+          return;
         }
+        console.log('Успішно завантажено подій:', data?.length || 0);
         console.log('Завантажені події з Supabase:', data);
         setEvents(data || []);
       } catch (error) {
-        console.error('Помилка при завантаженні подій:', error);
+        console.error('Неперехоплена помилка при завантаженні подій:', error);
+        setEvents([]);
       }
     };
 

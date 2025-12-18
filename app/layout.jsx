@@ -7,6 +7,9 @@ import { BookingProvider } from './context/BookingContext';
 export const metadata = {
   title: 'EventBooking',
   description: 'Book your favorite events',
+  icons: {
+    icon: '/images/pngicon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
