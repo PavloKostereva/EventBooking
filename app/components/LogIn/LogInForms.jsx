@@ -38,7 +38,14 @@ const AuthForm = () => {
         clearFields();
         setTimeout(() => router.push('/'), 500);
       } catch (error) {
-        setMessage(error.message);
+        console.error('Login error:', error);
+        let errorMessage = error.message || 'Помилка входу';
+        
+        if (errorMessage.includes('Firebase') || errorMessage.includes('firebase')) {
+          errorMessage = 'Помилка налаштування авторизації. Перевірте налаштування Supabase.';
+        }
+        
+        setMessage(errorMessage);
         setMessageType('error');
       }
     } else {
@@ -74,7 +81,14 @@ const AuthForm = () => {
         clearFields();
         setTimeout(() => router.push('/'), 500);
       } catch (error) {
-        setMessage(error.message);
+        console.error('Registration error:', error);
+        let errorMessage = error.message || 'Помилка реєстрації';
+        
+        if (errorMessage.includes('Firebase') || errorMessage.includes('firebase')) {
+          errorMessage = 'Помилка налаштування авторизації. Перевірте налаштування Supabase.';
+        }
+        
+        setMessage(errorMessage);
         setMessageType('error');
       }
     }
@@ -87,13 +101,21 @@ const AuthForm = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Google OAuth error:', error);
+        setMessage(`Помилка авторизації через Google: ${error.message}`);
+        setMessageType('error');
+        return;
+      }
+      
+      // OAuth redirect will happen automatically
     } catch (error) {
-      setMessage(error.message);
+      console.error('Unexpected error during Google login:', error);
+      setMessage(`Помилка: ${error.message || 'Невідома помилка'}`);
       setMessageType('error');
     }
   };
