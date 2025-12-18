@@ -49,6 +49,7 @@ export const useRatings = (eventId, currentPage = 1) => {
     if (eventId) {
       fetchRatings(currentPage);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId, currentPage]);
 
   return {

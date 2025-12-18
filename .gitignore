@@ -14,6 +14,12 @@ node_modules/
 .env.*.local
 .servicaAccountKey.json
 
+# Next.js
+.next/
+out/
+build/
+dist/
+
 
 
 # Editor directories and files
