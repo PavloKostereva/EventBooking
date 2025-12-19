@@ -76,12 +76,13 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       .select('*')
       .eq('event_id', eventId);
 
-    const avgRating = (allRatings as Rating[] | null)?.length > 0
-      ? (allRatings as Rating[]).reduce((sum, r) => sum + (r.rating || 0), 0) / (allRatings as Rating[]).length
+    const ratingsArray = (allRatings as Rating[]) || [];
+    const avgRating = ratingsArray.length > 0
+      ? ratingsArray.reduce((sum, r) => sum + (r.rating || 0), 0) / ratingsArray.length
       : 0;
 
     const limit = 2;
-    const paginatedRatings = ((allRatings as Rating[]) || []).slice(0, limit);
+    const paginatedRatings = ratingsArray.slice(0, limit);
 
     return NextResponse.json({
       success: true,

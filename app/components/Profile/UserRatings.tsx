@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { Rating } from '../../../types';
-import '../../styles/profile.css';
 
 interface EventsMap {
   [key: string]: {
@@ -62,20 +61,20 @@ const UserRatings = () => {
 
   if (loading) {
     return (
-      <div className={`user-ratings-section ${darkMode ? 'dark' : ''}`}>
-        <h3>Мої відгуки</h3>
-        <div className="ratings-loading">Завантаження відгуків...</div>
+      <div className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-md border border-gray-200 dark:border-slate-700 mb-8 ${darkMode ? 'bg-slate-800 border-slate-700' : ''}`}>
+        <h3 className="text-text-primary dark:text-slate-100 text-2xl mb-6 font-semibold">Мої відгуки</h3>
+        <div className="text-center py-12 text-text-secondary dark:text-slate-300">Завантаження відгуків...</div>
       </div>
     );
   }
 
   if (ratings.length === 0) {
     return (
-      <div className={`user-ratings-section ${darkMode ? 'dark' : ''}`}>
-        <h3>Мої відгуки</h3>
-        <div className="no-ratings">
+      <div className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-md border border-gray-200 dark:border-slate-700 mb-8 ${darkMode ? 'bg-slate-800 border-slate-700' : ''}`}>
+        <h3 className="text-text-primary dark:text-slate-100 text-2xl mb-6 font-semibold">Мої відгуки</h3>
+        <div className="text-center py-12 text-text-secondary dark:text-slate-300">
           <p>Ви ще не залишили жодного відгуку</p>
-          <p className="no-ratings-hint">
+          <p className="mt-2 text-sm text-text-light dark:text-slate-500">
             Перейдіть на сторінку подій, щоб залишити свій перший відгук!
           </p>
         </div>
@@ -83,10 +82,18 @@ const UserRatings = () => {
     );
   }
 
+  const formatDate = (date?: string | { seconds: number }) => {
+    if (!date) return 'Невідома дата';
+    if (typeof date === 'object' && 'seconds' in date) {
+      return new Date(date.seconds * 1000).toLocaleDateString('uk-UA');
+    }
+    return new Date(date).toLocaleDateString('uk-UA');
+  };
+
   return (
-    <div className={`user-ratings-section ${darkMode ? 'dark' : ''}`}>
-      <h3>Мої відгуки ({ratings.length})</h3>
-      <div className="ratings-list">
+    <div className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-md border border-gray-200 dark:border-slate-700 mb-8 ${darkMode ? 'bg-slate-800 border-slate-700' : ''}`}>
+      <h3 className="text-text-primary dark:text-slate-100 text-2xl mb-6 font-semibold">Мої відгуки ({ratings.length})</h3>
+      <div className="flex flex-col gap-6">
         {ratings.map((rating, index) => {
           const eventId = rating.eventId;
           let event = eventsMap[String(eventId)];
@@ -108,39 +115,35 @@ const UserRatings = () => {
             );
           }
 
-          const formatDate = (date?: string | { seconds: number }) => {
-            if (!date) return 'Невідома дата';
-            if (typeof date === 'object' && 'seconds' in date) {
-              return new Date(date.seconds * 1000).toLocaleDateString('uk-UA');
-            }
-            return new Date(date).toLocaleDateString('uk-UA');
-          };
-
           return (
-            <div key={index} className="rating-item">
-              <div className="rating-item-header">
-                <h4 className="rating-event-title">{event.title}</h4>
-                <div className="rating-stars">
+            <div key={index} className="bg-bg-tertiary dark:bg-slate-700 rounded-lg p-6 border-l-4 border-primary transition-all duration-300 hover:translate-x-1 hover:shadow-md">
+              <div className="flex justify-between items-start mb-4 flex-wrap gap-4">
+                <h4 className="text-text-primary dark:text-slate-100 text-xl font-semibold m-0">{event.title}</h4>
+                <div className="flex items-center gap-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span
                       key={star}
-                      className={star <= (rating.rating || 0) ? 'star-filled' : 'star-empty'}>
+                      className={`text-xl ${star <= (rating.rating || 0) ? 'text-yellow-400' : 'text-text-light dark:text-slate-500'}`}>
                       ★
                     </span>
                   ))}
-                  <span className="rating-value">{rating.rating}/5</span>
+                  <span className="text-text-primary dark:text-slate-100 font-semibold ml-2 text-base">{rating.rating}/5</span>
                 </div>
               </div>
-              {rating.comment && <p className="rating-comment">{rating.comment}</p>}
-              <div className="rating-meta">
-                <span className="rating-date">
+              {rating.comment && (
+                <p className="text-text-secondary dark:text-slate-300 leading-relaxed my-4 p-4 bg-white dark:bg-slate-800 rounded-md italic">
+                  {rating.comment}
+                </p>
+              )}
+              <div className="flex justify-between items-center text-sm text-text-light dark:text-slate-500 pt-4 border-t border-gray-200 dark:border-slate-600">
+                <span className="flex items-center gap-2">
                   {rating.updatedAt
                     ? formatDate(rating.updatedAt)
                     : rating.createdAt
                     ? formatDate(rating.createdAt)
                     : 'Невідома дата'}
                 </span>
-                <span className="rating-event-date">Подія: {event.date}</span>
+                <span className="flex items-center gap-2">Подія: {event.date}</span>
               </div>
             </div>
           );
@@ -151,4 +154,3 @@ const UserRatings = () => {
 };
 
 export default UserRatings;
-

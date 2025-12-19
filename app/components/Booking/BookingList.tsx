@@ -7,28 +7,46 @@ const BookingList = () => {
     const { darkMode } = useTheme()
 
     if (loading) {
-        return <p>Завантаження ваших бронювань...</p>;
+        return <p className="text-text-primary dark:text-slate-100">Завантаження ваших бронювань...</p>;
     }
 
     if (bookings.length === 0) {
-        return <p>Немає бронювань.</p>
+        return <p className="text-text-primary dark:text-slate-100">Немає бронювань.</p>
     }
 
     return (
-        <div>
+        <div className="flex flex-col gap-6">
             {bookings.map((booking) => (
-                <div className={`booking ${darkMode ? 'dark-booking' : ''}`} key={booking.id}>
-                    <h3>Event: {booking.event_data?.title || booking.event?.title || 'Невідома подія'}</h3>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Date:</strong> {booking.event_data?.date || booking.event?.date}</p>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Location:</strong> {booking.event_data?.location || booking.event?.location}</p>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Price:</strong> {booking.event_data?.price || booking.event?.price}</p>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Name:</strong> {booking.first_name || booking.firstName} {booking.last_name || booking.lastName}</p>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Email:</strong> {booking.email}</p>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Phone:</strong> {booking.phone}</p>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Tickets:</strong> {booking.ticket_quantity || booking.ticketQuantity}</p>
-                    <p className={darkMode ? 'dark-text' : ''}><strong>Total Price:</strong> {booking.total_price || booking.totalPrice}</p>
+                <div className={`bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-8 my-6 rounded-lg shadow-md text-left w-full transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${darkMode ? 'bg-slate-700 text-slate-100' : ''}`} key={booking.id}>
+                    <h3 className="text-3xl text-text-primary dark:text-slate-100 mb-4 font-semibold pb-3 border-b-2 border-gray-200 dark:border-slate-600">
+                        Подія: {booking.event_data?.title || booking.event?.title || 'Невідома подія'}
+                    </h3>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Дата:</strong> {booking.event_data?.date || booking.event?.date}
+                    </p>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Місце:</strong> {booking.event_data?.location || booking.event?.location}
+                    </p>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Ціна:</strong> {booking.event_data?.price || booking.event?.price}
+                    </p>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Ім'я:</strong> {booking.first_name} {booking.last_name}
+                    </p>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Email:</strong> {booking.email}
+                    </p>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Телефон:</strong> {booking.phone}
+                    </p>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Квитків:</strong> {booking.ticket_quantity}
+                    </p>
+                    <p className={`text-base text-text-secondary dark:text-slate-300 my-3 leading-relaxed ${darkMode ? 'text-slate-300' : ''}`}>
+                        <strong className="font-semibold text-text-primary dark:text-slate-100 mr-2">Загальна сума:</strong> {booking.total_price}
+                    </p>
                     <button
-                        className="cancel-btn"
+                        className="bg-error text-white border-none px-8 py-3.5 rounded-md cursor-pointer text-base font-medium transition-all duration-300 block mx-auto mt-6 shadow-sm w-full max-w-[300px] hover:bg-red-600 hover:-translate-y-0.5 hover:shadow-md"
                         onClick={() => booking.id && cancelBooking(booking.id)}
                     >
                         Скасувати
@@ -40,4 +58,3 @@ const BookingList = () => {
 }
 
 export default BookingList
-

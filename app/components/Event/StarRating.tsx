@@ -25,7 +25,7 @@ const StarRating = ({ eventId, onAverageRatingChange, onRatingsChange }: StarRat
             .eq('user_id', currentUser.id)
             .single();
 
-          if (error && error.code !== 'PGRST116') {
+          if (error && (error as { code?: string }).code !== 'PGRST116') {
             console.error('Error fetching rating:', error);
           } else if (data) {
             setRating((data.rating as number) || 0);
@@ -107,23 +107,27 @@ const StarRating = ({ eventId, onAverageRatingChange, onRatingsChange }: StarRat
   };
 
   return (
-    <div className="stars-section">
-      <div className="comment-container">
+    <div className="flex flex-col items-center gap-3 mt-4">
+      <div className="flex justify-center items-center gap-2 mt-3 w-full">
         <input
           type="text"
-          className="comment-input"
+          className="px-2.5 py-2.5 w-[70%] border border-gray-200 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-text-primary dark:text-slate-100 text-sm focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 placeholder:text-gray-400 dark:placeholder:text-slate-500"
           value={comment}
           placeholder="Залиште коментар..."
           onChange={(e: ChangeEvent<HTMLInputElement>) => setComment(e.target.value)}
         />
-        <button onClick={handleCommentSubmit}>Відправити</button>
+        <button 
+          onClick={handleCommentSubmit}
+          className="px-4 py-2.5 bg-success text-white border-none rounded-md cursor-pointer font-medium transition-all duration-300 hover:bg-green-700 hover:-translate-y-0.5">
+          Відправити
+        </button>
       </div>
 
-      <div className="stars-container">
+      <div className="text-2xl mt-3 flex gap-1 justify-center">
         {[1, 2, 3, 4, 5].map((num) => (
           <span
             key={num}
-            style={{ color: num <= rating ? 'gold' : 'gray', cursor: 'pointer' }}
+            className={`cursor-pointer transition-transform duration-200 hover:scale-125 ${num <= rating ? 'text-yellow-400' : 'text-gray-400'}`}
             onClick={() => handleRate(num)}>
             ★
           </span>
@@ -134,4 +138,3 @@ const StarRating = ({ eventId, onAverageRatingChange, onRatingsChange }: StarRat
 };
 
 export default StarRating;
-

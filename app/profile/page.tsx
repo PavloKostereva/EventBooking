@@ -5,7 +5,6 @@ import { useTheme } from '../context/ThemeContext';
 import ProfileInfo from '../components/Profile/ProfileInfo';
 import UserRatings from '../components/Profile/UserRatings';
 import BookingList from '../components/Booking/BookingList';
-import '../styles/profile.css';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,9 +14,12 @@ export default function UserProfilePage() {
 
   if (loading) {
     return (
-      <div className={`profile-page-container ${darkMode ? 'dark' : ''}`}>
-        <div className="profile-loading">
-          <p>Завантаження профілю...</p>
+      <div
+        className={`max-w-[1400px] mx-auto px-8 py-8 min-h-[calc(100vh-200px)] ${
+          darkMode ? 'bg-slate-800' : ''
+        }`}>
+        <div className="text-center py-12 px-12 bg-white dark:bg-slate-800 rounded-lg shadow-md">
+          <p className="text-text-primary dark:text-slate-100">Завантаження профілю...</p>
         </div>
       </div>
     );
@@ -25,12 +27,19 @@ export default function UserProfilePage() {
 
   if (!currentUser) {
     return (
-      <div className={`profile-page-container ${darkMode ? 'dark' : ''}`}>
-        <div className="profile-not-authenticated">
-          <h2>Профіль Користувача</h2>
-          <p>
+      <div
+        className={`max-w-[1400px] mx-auto px-8 py-8 min-h-[calc(100vh-200px)] ${
+          darkMode ? 'bg-slate-800' : ''
+        }`}>
+        <div className="text-center py-12 px-12 bg-white dark:bg-slate-800 rounded-lg shadow-md">
+          <h2 className="text-text-primary dark:text-slate-100 mb-4 text-2xl font-semibold">
+            Профіль Користувача
+          </h2>
+          <p className="text-text-primary dark:text-slate-100">
             Будь ласка,{' '}
-            <Link href="/logIn" className="profile-login-link">
+            <Link
+              href="/logIn"
+              className="text-primary font-semibold no-underline transition-colors duration-300 hover:text-primary-dark hover:underline">
               увійдіть
             </Link>
             , щоб переглянути свої дані профілю.
@@ -41,37 +50,59 @@ export default function UserProfilePage() {
   }
 
   return (
-    <div className={`profile-page-container ${darkMode ? 'dark' : ''}`}>
-      <div className="profile-header">
-        <h1>Мій Профіль</h1>
+    <div
+      className={`max-w-[1400px] mx-auto px-8 py-8 min-h-[calc(100vh-200px)] ${
+        darkMode ? 'bg-slate-800' : ''
+      }`}>
+      <div className="mb-8">
+        <h1 className="text-4xl text-text-primary dark:text-slate-100 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          Мій Профіль
+        </h1>
       </div>
 
-      <div className="profile-content">
-        <div className="profile-main-section">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
+        <div className="flex flex-col gap-8">
           <ProfileInfo />
 
-          <div className={`profile-stats-section ${darkMode ? 'dark' : ''}`}>
-            <h3>Статистика</h3>
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-icon">📅</div>
-                <div className="stat-info">
-                  <span className="stat-label">Активних бронювань</span>
-                  <span className="stat-value">—</span>
+          <div
+            className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-md border border-gray-200 dark:border-slate-700 mb-8 ${
+              darkMode ? 'bg-slate-800 border-slate-700' : ''
+            }`}>
+            <h3 className="text-text-primary dark:text-slate-100 text-2xl mb-6 font-semibold">
+              Статистика
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="bg-bg-tertiary dark:bg-slate-700 rounded-lg p-6 flex items-center gap-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
+                <div className="text-4xl leading-none">📅</div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-text-secondary dark:text-slate-400 text-sm">
+                    Активних бронювань
+                  </span>
+                  <span className="text-text-primary dark:text-slate-100 text-2xl font-bold text-primary">
+                    —
+                  </span>
                 </div>
               </div>
-              <div className="stat-card">
-                <div className="stat-icon">⭐</div>
-                <div className="stat-info">
-                  <span className="stat-label">Залишено відгуків</span>
-                  <span className="stat-value">—</span>
+              <div className="bg-bg-tertiary dark:bg-slate-700 rounded-lg p-6 flex items-center gap-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
+                <div className="text-4xl leading-none">⭐</div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-text-secondary dark:text-slate-400 text-sm">
+                    Залишено відгуків
+                  </span>
+                  <span className="text-text-primary dark:text-slate-100 text-2xl font-bold text-primary">
+                    —
+                  </span>
                 </div>
               </div>
-              <div className="stat-card">
-                <div className="stat-icon">🎫</div>
-                <div className="stat-info">
-                  <span className="stat-label">Всього квитків</span>
-                  <span className="stat-value">—</span>
+              <div className="bg-bg-tertiary dark:bg-slate-700 rounded-lg p-6 flex items-center gap-4 transition-transform duration-300 hover:-translate-y-1 hover:shadow-md">
+                <div className="text-4xl leading-none">🎫</div>
+                <div className="flex flex-col gap-1">
+                  <span className="text-text-secondary dark:text-slate-400 text-sm">
+                    Всього квитків
+                  </span>
+                  <span className="text-text-primary dark:text-slate-100 text-2xl font-bold text-primary">
+                    —
+                  </span>
                 </div>
               </div>
             </div>
@@ -80,28 +111,47 @@ export default function UserProfilePage() {
           <UserRatings />
         </div>
 
-        <div className="profile-sidebar">
-          <div className={`profile-booking-section ${darkMode ? 'dark' : ''}`}>
-            <h3>Мої Бронювання</h3>
+        <div className="flex flex-col gap-8">
+          <div
+            className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-md border border-gray-200 dark:border-slate-700 ${
+              darkMode ? 'bg-slate-800 border-slate-700' : ''
+            }`}>
+            <h3 className="text-text-primary dark:text-slate-100 text-2xl mb-6 font-semibold">
+              Мої Бронювання
+            </h3>
             <BookingList />
           </div>
 
-          <div className={`profile-actions-section ${darkMode ? 'dark' : ''}`}>
-            <h3>Швидкі дії</h3>
-            <div className="action-buttons">
-              <Link href="/events" className="action-btn primary">
+          <div
+            className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-md border border-gray-200 dark:border-slate-700 ${
+              darkMode ? 'bg-slate-800 border-slate-700' : ''
+            }`}>
+            <h3 className="text-text-primary dark:text-slate-100 text-2xl mb-6 font-semibold">
+              Швидкі дії
+            </h3>
+            <div className="flex flex-col gap-4">
+              <Link
+                href="/events"
+                className="px-6 py-4 rounded-md no-underline text-center font-semibold transition-all duration-300 block bg-gradient-to-r from-primary to-secondary text-white shadow-md hover:-translate-y-0.5 hover:shadow-lg">
                 Переглянути події
               </Link>
-              <Link href="/booking" className="action-btn secondary">
+              <Link
+                href="/booking"
+                className="px-6 py-4 rounded-md no-underline text-center font-semibold transition-all duration-300 block bg-bg-tertiary dark:bg-slate-700 text-text-primary dark:text-slate-100 border-2 border-gray-200 dark:border-slate-600 hover:bg-primary hover:text-white hover:border-primary">
                 Мої бронювання
               </Link>
             </div>
           </div>
 
-          <div className={`profile-info-section ${darkMode ? 'dark' : ''}`}>
-            <h3>Інформація</h3>
-            <div className="info-content">
-              <p>
+          <div
+            className={`bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-md border border-gray-200 dark:border-slate-700 ${
+              darkMode ? 'bg-slate-800 border-slate-700' : ''
+            }`}>
+            <h3 className="text-text-primary dark:text-slate-100 text-2xl mb-6 font-semibold">
+              Інформація
+            </h3>
+            <div className="text-text-secondary dark:text-slate-300 leading-relaxed">
+              <p className="mb-4">
                 Тут ви можете переглянути всю інформацію про свій профіль, відгуки та бронювання.
               </p>
               <p>Ваші відгуки допомагають іншим користувачам вибрати найкращі події!</p>

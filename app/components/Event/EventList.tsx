@@ -154,9 +154,11 @@ const EventList = () => {
 
   return (
     <section>
-      <h2>Події</h2>
+      <h2 className="text-center mb-8 text-4xl text-text-primary dark:text-slate-100 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+        Події
+      </h2>
 
-      <div className="filter-controls">
+      <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md mb-8 border border-gray-200 dark:border-slate-700">
         <EventFilter
           onSortChange={setSortOption}
           onTypeChange={setSelectedType}
@@ -172,29 +174,34 @@ const EventList = () => {
           searchQuery={searchQuery}
         />
 
-        <div className="show-past-events">
-          <label>
-            <input type="checkbox" checked={showPastEvents} onChange={togglePastEvents} />
+        <div className="flex justify-center items-center gap-2">
+          <label className="flex items-center gap-2 cursor-pointer text-text-primary dark:text-slate-100 font-medium">
+            <input 
+              type="checkbox" 
+              checked={showPastEvents} 
+              onChange={togglePastEvents}
+              className="w-5 h-5 cursor-pointer accent-primary" 
+            />
             Показувати минулі події
           </label>
         </div>
       </div>
 
-      <div className="events-grid">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center mt-8">
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event) => <EventCard key={event.id || event.title} event={event} />)
         ) : events.length > 0 ? (
-          <div>
-            <p className="no-events">
+          <div className="col-span-full">
+            <p className="text-center py-5 text-lg text-text-primary dark:text-slate-100">
               Немає запланованих подій вибраного типу (знайдено {events.length} подій в базі, але
               всі відфільтровані)
             </p>
-            <p style={{ marginTop: '10px', fontSize: '0.9em', color: '#666' }}>
+            <p className="mt-2.5 text-sm text-gray-600 dark:text-slate-400 text-center">
               Спробуйте увімкнути "Показувати минулі події" або змінити фільтри
             </p>
           </div>
         ) : (
-          <p className="no-events">Немає запланованих подій вибраного типу</p>
+          <p className="col-span-full text-center py-5 text-lg text-text-primary dark:text-slate-100">Немає запланованих подій вибраного типу</p>
         )}
       </div>
     </section>
@@ -202,4 +209,3 @@ const EventList = () => {
 };
 
 export default EventList;
-
