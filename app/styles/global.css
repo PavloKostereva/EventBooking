@@ -5,17 +5,17 @@
 }
 
 :root {
-  --primary-color: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #818cf8;
-  --secondary-color: #8b5cf6;
-  --accent-color: #ec4899;
-  --success-color: #10b981;
+  --primary-color: #0ea5e9;
+  --primary-dark: #0284c7;
+  --primary-light: #38bdf8;
+  --secondary-color: #06b6d4;
+  --accent-color: #f43f5e;
+  --success-color: #22c55e;
   --warning-color: #f59e0b;
   --error-color: #ef4444;
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
+  --bg-secondary: #f0f9ff;
+  --bg-tertiary: #e0f2fe;
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-light: #94a3b8;
@@ -53,11 +53,13 @@ body {
 header {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   padding: 1.25rem 0;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-xl);
   position: sticky;
   top: 0;
   z-index: 100;
   width: 100%;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 header nav {
@@ -189,6 +191,8 @@ footer {
   text-align: center;
   box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
   margin-top: auto;
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-text {

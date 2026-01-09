@@ -22,13 +22,18 @@ const EventList = () => {
         const { data, error } = await supabase.from('events').select('*');
 
         if (error) {
-          console.error('Помилка при завантаженні подій:', error);
-          console.error('Помилка деталі:', {
-            message: error.message,
-            code: error.code,
-            details: error.details,
-            hint: error.hint,
-          });
+          console.error('Error loading events:', error);
+          if (error instanceof Error) {
+            console.error('Error details:', {
+              message: error.message,
+              name: error.name,
+              stack: error.stack,
+            });
+          } else if (typeof error === 'object') {
+            console.error('Error object:', JSON.stringify(error, null, 2));
+          } else {
+            console.error('Error value:', error);
+          }
           setEvents([]);
           return;
         }
@@ -36,7 +41,18 @@ const EventList = () => {
         console.log('Завантажені події з Supabase:', data);
         setEvents((data as Event[]) || []);
       } catch (error) {
-        console.error('Неперехоплена помилка при завантаженні подій:', error);
+        console.error('Unhandled error loading events:', error);
+        if (error instanceof Error) {
+          console.error('Error details:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack,
+          });
+        } else if (typeof error === 'object') {
+          console.error('Error object:', JSON.stringify(error, null, 2));
+        } else {
+          console.error('Error value:', error);
+        }
         setEvents([]);
       }
     };
@@ -45,7 +61,9 @@ const EventList = () => {
   }, []);
 
   const eventTypes = [...new Set(events.map((event) => event.type))] as EventType[];
-  const eventLocations = [...new Set(events.map((event) => event.location).filter(Boolean))] as string[];
+  const eventLocations = [
+    ...new Set(events.map((event) => event.location).filter(Boolean)),
+  ] as string[];
 
   useEffect(() => {
     const today = new Date();
@@ -123,11 +141,13 @@ const EventList = () => {
           return new Date(b.date).getTime() - new Date(a.date).getTime();
         case 'price-asc':
           return (
-            parseInt(a.price?.replace(/\D/g, '') || '0') - parseInt(b.price?.replace(/\D/g, '') || '0')
+            parseInt(a.price?.replace(/\D/g, '') || '0') -
+            parseInt(b.price?.replace(/\D/g, '') || '0')
           );
         case 'price-desc':
           return (
-            parseInt(b.price?.replace(/\D/g, '') || '0') - parseInt(a.price?.replace(/\D/g, '') || '0')
+            parseInt(b.price?.replace(/\D/g, '') || '0') -
+            parseInt(a.price?.replace(/\D/g, '') || '0')
           );
         case 'name-asc':
           return (a.title || '').localeCompare(b.title || '', 'uk');
@@ -153,7 +173,7 @@ const EventList = () => {
   };
 
   return (
-    <section>
+    <section className="min-h-[80vh] flex flex-col">
       <h2 className="text-center mb-8 text-4xl text-text-primary dark:text-slate-100 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
         Події
       </h2>
@@ -176,22 +196,22 @@ const EventList = () => {
 
         <div className="flex justify-center items-center gap-2">
           <label className="flex items-center gap-2 cursor-pointer text-text-primary dark:text-slate-100 font-medium">
-            <input 
-              type="checkbox" 
-              checked={showPastEvents} 
+            <input
+              type="checkbox"
+              checked={showPastEvents}
               onChange={togglePastEvents}
-              className="w-5 h-5 cursor-pointer accent-primary" 
+              className="w-5 h-5 cursor-pointer accent-primary"
             />
             Показувати минулі події
           </label>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center mt-8 flex-1">
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event) => <EventCard key={event.id || event.title} event={event} />)
         ) : events.length > 0 ? (
-          <div className="col-span-full">
+          <div className="col-span-full flex flex-col items-center justify-center min-h-[400px]">
             <p className="text-center py-5 text-lg text-text-primary dark:text-slate-100">
               Немає запланованих подій вибраного типу (знайдено {events.length} подій в базі, але
               всі відфільтровані)
@@ -201,7 +221,11 @@ const EventList = () => {
             </p>
           </div>
         ) : (
-          <p className="col-span-full text-center py-5 text-lg text-text-primary dark:text-slate-100">Немає запланованих подій вибраного типу</p>
+          <div className="col-span-full flex flex-col items-center justify-center min-h-[400px]">
+            <p className="text-center py-5 text-lg text-text-primary dark:text-slate-100">
+              Немає запланованих подій вибраного типу
+            </p>
+          </div>
         )}
       </div>
     </section>

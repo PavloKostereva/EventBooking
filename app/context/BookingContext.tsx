@@ -32,16 +32,30 @@ export const BookingProvider = ({ children }: BookingContextProps) => {
 
     const fetchBookings = async () => {
       try {
+        setLoading(true);
         const { data, error } = await supabase
           .from('bookings')
           .select('*')
           .eq('user_uid', currentUser.id)
           .order('timestamp', { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
         setBookings((data as Booking[]) || []);
       } catch (error) {
-        console.error('Error fetching bookings: ', error);
+        console.error('Error fetching bookings:', error);
+        if (error instanceof Error) {
+          console.error('Error details:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack,
+          });
+        } else if (typeof error === 'object') {
+          console.error('Error object:', JSON.stringify(error, null, 2));
+        } else {
+          console.error('Error value:', error);
+        }
         setBookings([]);
       } finally {
         setLoading(false);
@@ -50,36 +64,58 @@ export const BookingProvider = ({ children }: BookingContextProps) => {
 
     fetchBookings();
 
-    const channel = supabase
-      .channel('bookings-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'bookings',
-          filter: `user_uid=eq.${currentUser.id}`,
-        },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setBookings((prev) => [payload.new as Booking, ...prev]);
-          } else if (payload.eventType === 'UPDATE') {
-            setBookings((prev) => prev.map((b) => (b.id === (payload.new as Booking).id ? payload.new as Booking : b)));
-          } else if (payload.eventType === 'DELETE') {
-            setBookings((prev) => prev.filter((b) => b.id !== (payload.old as Booking).id));
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+
+    try {
+      channel = supabase
+        .channel(`bookings-changes-${currentUser.id}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'bookings',
+            filter: `user_uid=eq.${currentUser.id}`,
+          },
+          (payload) => {
+            if (payload.eventType === 'INSERT') {
+              setBookings((prev) => [payload.new as Booking, ...prev]);
+            } else if (payload.eventType === 'UPDATE') {
+              setBookings((prev) =>
+                prev.map((b) =>
+                  b.id === (payload.new as Booking).id ? (payload.new as Booking) : b,
+                ),
+              );
+            } else if (payload.eventType === 'DELETE') {
+              setBookings((prev) => prev.filter((b) => b.id !== (payload.old as Booking).id));
+            }
+          },
+        )
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('Bookings subscription active');
+          } else if (status === 'CHANNEL_ERROR') {
+            console.warn('Bookings subscription error - continuing without realtime updates');
+          } else if (status === 'TIMED_OUT') {
+            console.warn('Bookings subscription timeout - continuing without realtime updates');
+          } else if (status === 'CLOSED') {
+            console.warn('Bookings subscription closed');
           }
-        },
-      )
-      .subscribe();
+        });
+    } catch (error) {
+      console.warn('Failed to set up bookings subscription:', error);
+    }
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        supabase.removeChannel(channel);
+      }
     };
   }, [currentUser, isAuthenticated]);
 
   const addBooking = async (booking: BookingFormData): Promise<boolean> => {
     if (!isAuthenticated || !currentUser) {
-      console.error('Спроба бронювання без авторизації.');
+      console.error('Attempting booking without authorization');
       alert('Потрібно авторизуватися, щоб забронювати квиток!');
       return false;
     }
@@ -98,12 +134,27 @@ export const BookingProvider = ({ children }: BookingContextProps) => {
         timestamp: new Date().toISOString(),
       };
 
-      const { error } = await supabase.from('bookings').insert([bookingData]);
+      const { data, error } = await supabase.from('bookings').insert([bookingData]).select();
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
+
+      if (data && data.length > 0) {
+        setBookings((prev) => [data[0] as Booking, ...prev]);
+      }
+
       return true;
     } catch (error) {
       console.error('Error adding booking:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          message: error.message,
+          name: error.name,
+        });
+      } else if (typeof error === 'object') {
+        console.error('Error object:', JSON.stringify(error, null, 2));
+      }
       return false;
     }
   };
@@ -112,10 +163,23 @@ export const BookingProvider = ({ children }: BookingContextProps) => {
     try {
       const { error } = await supabase.from('bookings').delete().eq('id', id);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
+
+      setBookings((prev) => prev.filter((b) => b.id !== id));
+
       return true;
     } catch (error) {
       console.error('Error canceling booking:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', {
+          message: error.message,
+          name: error.name,
+        });
+      } else if (typeof error === 'object') {
+        console.error('Error object:', JSON.stringify(error, null, 2));
+      }
       return false;
     }
   };
@@ -139,4 +203,3 @@ export const BookingProvider = ({ children }: BookingContextProps) => {
     </BookingContext.Provider>
   );
 };
-
