@@ -61,6 +61,15 @@ const Header = () => {
           <li className="flex items-center gap-3">
             {currentUser ? (
               <>
+                <span className="font-medium text-white text-sm bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm">
+                  Привіт, {userData?.email || currentUser?.email || 'користувачу'}!
+                </span>
+                <button 
+                  onClick={toggleTheme} 
+                  className="bg-white/15 text-white border border-white/25 px-4 py-2.5 rounded-lg cursor-pointer text-sm font-medium transition-all duration-300 hover:bg-white/25 hover:-translate-y-0.5 hover:shadow-lg backdrop-blur-sm flex items-center gap-2">
+                  <span>{darkMode ? '☀️' : '🌙'}</span>
+                  <span>{darkMode ? 'Light' : 'Dark'}</span>
+                </button>
                 <Link href="/profile" className={linkClasses('/profile')}>
                   <span className="relative z-10">Profile</span>
                 </Link>
@@ -69,21 +78,20 @@ const Header = () => {
                   className="text-white text-base font-medium px-5 py-2.5 rounded-lg transition-all duration-300 bg-white/10 hover:bg-white/20 hover:-translate-y-0.5 hover:shadow-md border border-white/20">
                   Logout
                 </button>
-                <span className="mr-2.5 font-medium text-white text-sm bg-white/10 px-3 py-1.5 rounded-lg backdrop-blur-sm">
-                  Привіт, {userData?.email || currentUser?.email || 'користувачу'}!
-                </span>
               </>
             ) : (
-              <Link href="/logIn" className={linkClasses('/logIn')}>
-                <span className="relative z-10">LogIn</span>
-              </Link>
+              <>
+                <Link href="/logIn" className={linkClasses('/logIn')}>
+                  <span className="relative z-10">LogIn</span>
+                </Link>
+                <button 
+                  onClick={toggleTheme} 
+                  className="bg-white/15 text-white border border-white/25 px-4 py-2.5 rounded-lg cursor-pointer text-sm font-medium transition-all duration-300 hover:bg-white/25 hover:-translate-y-0.5 hover:shadow-lg backdrop-blur-sm flex items-center gap-2">
+                  <span>{darkMode ? '☀️' : '🌙'}</span>
+                  <span>{darkMode ? 'Light' : 'Dark'}</span>
+                </button>
+              </>
             )}
-            <button 
-              onClick={toggleTheme} 
-              className="bg-white/15 text-white border border-white/25 px-4 py-2.5 rounded-lg cursor-pointer text-sm font-medium transition-all duration-300 hover:bg-white/25 hover:-translate-y-0.5 hover:shadow-lg backdrop-blur-sm flex items-center gap-2">
-              <span>{darkMode ? '☀️' : '🌙'}</span>
-              <span>{darkMode ? 'Light' : 'Dark'}</span>
-            </button>
           </li>
         </ul>
       </nav>
